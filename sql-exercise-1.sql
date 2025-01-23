@@ -123,6 +123,8 @@ SELECT * FROM Products WHERE ProductName LIKE '%phone';
 
 SELECT * FROM Products WHERE ProductName LIKE 'Smart%';
 
+SELECT * FROM Products WHERE ProductName LIKE 'Smart_____';
+
 SELECT * FROM Products WHERE ProductName IN ('Smartphone', 'Laptop');
 
 -- ------------------------------------------------------------------
@@ -151,7 +153,7 @@ WHERE ProductID = (SELECT MIN(ProductID) FROM Products);
 
 UPDATE Products SET ProductName='Book' WHERE ProductName='Novel';
 
-DELETE FROM Customers WHERE CustomerName='Zenith Corp';
+DELETE FROM Customers WHERE CustomerName='Zenith Corp';	
 
 -- ------------------------------------------------------------------
 -- 7. Sorting and Grouping
@@ -160,3 +162,34 @@ DELETE FROM Customers WHERE CustomerName='Zenith Corp';
 SELECT MIN(ProductID) AS MinProductID, MAX(ProductID) AS MaxProductID FROM Products;
 
 SELECT * FROM Products ORDER BY Price DESC;
+
+-- SQL Exercise 2
+
+-- ------------------------------------------------------------------
+-- 7. Table Update
+-- ------------------------------------------------------------------
+
+ALTER TABLE Suppliers
+ADD COLUMN ParentSupplierID INT; 
+
+ALTER TABLE Suppliers
+ADD CONSTRAINT FK_ParentSupplier
+    FOREIGN KEY (ParentSupplierID) REFERENCES Suppliers(SupplierID) ON DELETE SET NULL;
+    
+UPDATE Suppliers
+SET ParentSupplierID = NULL
+WHERE SupplierName = 'TechCorp';
+
+UPDATE Suppliers
+SET ParentSupplierID = 1
+WHERE SupplierName IN ('GadgetSupply', 'BookWorld');
+
+UPDATE Suppliers
+SET ParentSupplierID = 2
+WHERE SupplierName IN ('FashionLine', 'HomePlus');
+
+-- ------------------------------------------------------------------
+-- 4. JOIN Queries - Self Join
+-- ------------------------------------------------------------------
+
+SELECT S1.SupplierName AS SubCorp, S2.SupplierName AS ParentCorp FROM Suppliers S1  INNER JOIN Suppliers S2 ON S1.ParentSupplierId = S2.SupplierID;
